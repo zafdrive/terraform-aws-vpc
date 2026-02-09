@@ -1,23 +1,37 @@
-# 🚀 AWS VPC Module
+## 🎯 What is terraform-aws-vpc?
 
-[![Terraform](https://img.shields.io/badge/terraform-623CE4?style=for-the-badge&logo=terraform&logoColor=white)][terraform] [![AWS](https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white)][aws] [![CI](https://github.com/zafdrive/terraform-aws-vpc/actions/workflows/terraform.yml/badge.svg)][ci]
+**Production-grade AWS VPC Terraform module** that creates a complete **Multi-AZ network architecture** ready for real applications.
 
-**Production VPC**: Multi-AZ Public/Private + NAT Gateway
+### 🏗 What This Module Creates
 
-## 📋 Resources
+**Complete VPC Infrastructure (7 Resources)**:
 
-| Component | Count | Access |
-|-----------|-------|--------|
-| VPC | 1 | 10.0.0.0/16 |
-| Public Subnets | 3 | IGW |
-| Private Subnets | 3 | NAT |
-| NAT Gateway | 1 | Outbound |
+| Layer | Components | AZs | CIDR | Internet Access |
+|-------|------------|-----|------|-----------------|
+| **Core** | VPC + Route Tables | 1 | `10.0.0.0/16` | N/A |
+| **Public** | 3 Subnets + IGW | a/b/c | `10.0.101.0/24`<br>`10.0.102.0/24`<br>`10.0.103.0/24` | ✅ **Direct** |
+| **Private** | 3 Subnets + NAT | a/b/c | `10.0.1.0/24`<br>`10.0.2.0/24`<br>`10.0.3.0/24` | 🔒 **Outbound Only** |
 
-## 📤 Outputs
-| Name | Example |
-|------|---------|
-| vpc_id | vpc-0abc123 |
-| public_subnets | subnet-aaa,bbb |
-| private_subnets | subnet-111,222 |
+### 🌐 Production Network Architecture
 
-**zafdrive.com** | **DevOps Poland 2026**
+INTERNET (443/80)
+↓ Internet Gateway (IGW)
+┌──────────────────────┬──────────────────────┐
+│ PUBLIC SUBNETS │ PRIVATE SUBNETS │
+│ - ALB Load Balancer │ - k3s Worker Nodes │
+│ - Nginx Proxy │ - FastAPI Services │
+│ - Bastion SSH │ - PostgreSQL RDS │
+│ │ - Redis Cache │
+└──────────┬───────────┘ ↑ Outbound Only
+↓ NAT Gateway │ (yum/docker pull)
+
+### 📤 Terraform Outputs (Production Ready)
+
+| Output | Value Example | Used By |
+|--------|---------------|---------|
+| `vpc_id` | `vpc-0abcdef1234567890` | EKS, VPC Peering, Security Groups |
+| `public_subnets` | `["subnet-aaa","subnet-bbb","subnet-ccc"]` | ALB Target Groups, Bastion Hosts |
+| `private_subnets` | `["subnet-111","subnet-222","subnet-333"]` | k3s Node Groups, ECS Fargate, RDS |
+| `nat_public_ip` | `["3.123.45.67"]` | Firewall Whitelisting |
+
+### ✅ Production Features
