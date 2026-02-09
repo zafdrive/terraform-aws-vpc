@@ -19,6 +19,21 @@
 
 **Creates**: 7 resources | **Outputs**: vpc_id + subnets | **Cost**: $0.045/hr NAT
 
+terraform-aws-vpc
+
+Production Terraform module deploying a **complete AWS VPC** ready for real workloads:
+
+✅ **3 Public Subnets** (ALB, Nginx Proxy, Bastion SSH) with direct Internet Gateway access
+✅ **3 Private Subnets** (k3s workers, FastAPI apps, PostgreSQL RDS) secured via NAT Gateway  
+✅ **Multi-AZ High Availability** (eu-central-1a/b/c) - zero single point of failure
+✅ **Production-ready outputs**: vpc_id, public_subnets[], private_subnets[]
+
+**GitHub Actions CI/CD** with automated validation.
+**zafdrive.com IaC Platform** - Poland DevOps 2026 target.
+
+Official HashiCorp module: terraform-aws-modules/vpc/aws 5.9.0
+
+
 ## ✨ Production Features
 🔹 Multi-AZ HA (eu-central-1a/b/c)
 🔹 HashiCorp Official Module 5.9.0
