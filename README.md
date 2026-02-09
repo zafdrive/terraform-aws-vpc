@@ -1,47 +1,123 @@
-
 # 🚀 Terraform AWS VPC Module
 
-[![Terraform](https://img.shields.io/badge/terraform-623CE4?style=for-the-badge&logo=terraform&logoColor=white)](https://terraform.io)
-[![AWS](https://img.shields.io/badge/AWS-FF9900?style=for-the-badge&logo=amazon-aws&logoColor=black)](https://aws.amazon.com)
-[![CI](https://github.com/zafdrive/terraform-aws-vpc/actions/workflows/terraform.yml/badge.svg?branch=main)](https://github.com/zafdrive/terraform-aws-vpc/actions)
-[![MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=for-the-badge&logo=mit)](LICENSE)
+**Production-ready AWS VPC architecture using Terraform**
 
-<br>
+This module provisions a highly available, multi-AZ AWS VPC designed for real-world production workloads. It is built on top of the official HashiCorp VPC module and follows best practices for security, availability, and CI/CD automation.
 
-## Production AWS VPC Architecture
+---
 
-| **Layer** | **AZs** | **Internet** | **Use Case** |
-|-----------|---------|--------------|--------------|
-| VPC | 1 | - | Core Network |
-| **Public** | 3 | ✅ IGW | ALB/Nginx |
-| **Private** | 3 | 🔒 NAT | k3s/App/DB |
+## 📐 Architecture Overview
 
-**Creates**: 7 resources | **Outputs**: vpc_id + subnets | **Cost**: $0.045/hr NAT
+**Region:** `eu-central-1`
+**Availability Zones:** `eu-central-1a / 1b / 1c`
 
-terraform-aws-vpc
+| Layer   | AZs | Internet Access | Use Case                     |
+| ------- | --- | --------------- | ---------------------------- |
+| VPC     | 1   | —               | Core network                 |
+| Public  | 3   | ✅ Internet GW   | ALB, Nginx, Bastion SSH      |
+| Private | 3   | 🔒 NAT Gateway  | k3s, App services, Databases |
 
-Production Terraform module deploying a **complete AWS VPC** ready for real workloads:
+---
 
-✅ **3 Public Subnets** (ALB, Nginx Proxy, Bastion SSH) with direct Internet Gateway access
-✅ **3 Private Subnets** (k3s workers, FastAPI apps, PostgreSQL RDS) secured via NAT Gateway  
-✅ **Multi-AZ High Availability** (eu-central-1a/b/c) - zero single point of failure
-✅ **Production-ready outputs**: vpc_id, public_subnets[], private_subnets[]
+## 🧱 What This Module Creates
 
-**GitHub Actions CI/CD** with automated validation.
-**zafdrive.com IaC Platform** - Poland DevOps 2026 target.
+* **AWS Resources:** 7
+* **Outputs:**
 
-Official HashiCorp module: terraform-aws-modules/vpc/aws 5.9.0
+  * `vpc_id`
+  * `public_subnets[]`
+  * `private_subnets[]`
+* **Estimated Cost:** ~$0.045/hour (NAT Gateway)
 
+---
 
-## ✨ Production Features
-🔹 Multi-AZ HA (eu-central-1a/b/c)
-🔹 HashiCorp Official Module 5.9.0
-🔹 GitHub Actions CI/CD ✅
-🔹 Locked AWS Provider 5.100.0
-🔹 zafdrive.com IaC Platform
+## ✨ Features
 
-text
+* ✅ **3 Public Subnets**
 
-</div>
+  * Application Load Balancer
+  * Nginx reverse proxy
+  * Bastion host (SSH access)
 
-**Poland DevOps 2026** | **[zafdrive.com](https://zafdrive.com)**
+* 🔒 **3 Private Subnets**
+
+  * k3s worker nodes
+  * FastAPI / application workloads
+  * PostgreSQL (RDS-ready)
+
+* 🌍 **Multi-AZ High Availability**
+
+  * No single point of failure
+  * Production-grade resilience
+
+* 📦 **Official HashiCorp Module**
+
+  * `terraform-aws-modules/vpc/aws` `v5.9.0`
+
+* 🔐 **Locked Provider Versions**
+
+  * AWS Provider `v5.100.0`
+
+* 🤖 **CI/CD Ready**
+
+  * GitHub Actions with automated Terraform validation
+
+---
+
+## 📦 Usage Example
+
+```hcl
+module "vpc" {
+  source = "./terraform-aws-vpc"
+
+  name = "prod-vpc"
+  cidr = "10.0.0.0/16"
+
+  azs             = ["eu-central-1a", "eu-central-1b", "eu-central-1c"]
+  public_subnets  = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
+  private_subnets = ["10.0.11.0/24", "10.0.12.0/24", "10.0.13.0/24"]
+
+  enable_nat_gateway = true
+  single_nat_gateway = false
+}
+```
+
+---
+
+## ⚙️ Inputs
+
+| Name                 | Description            | Type           | Default | Required |
+| -------------------- | ---------------------- | -------------- | ------- | -------- |
+| `name`               | VPC name               | `string`       | —       | ✅        |
+| `cidr`               | VPC CIDR block         | `string`       | —       | ✅        |
+| `azs`                | Availability zones     | `list(string)` | —       | ✅        |
+| `public_subnets`     | Public subnet CIDRs    | `list(string)` | —       | ✅        |
+| `private_subnets`    | Private subnet CIDRs   | `list(string)` | —       | ✅        |
+| `enable_nat_gateway` | Enable NAT Gateway     | `bool`         | `true`  | ❌        |
+| `single_nat_gateway` | Use single NAT Gateway | `bool`         | `false` | ❌        |
+
+---
+
+## 📤 Outputs
+
+| Name              | Description                |
+| ----------------- | -------------------------- |
+| `vpc_id`          | ID of the created VPC      |
+| `public_subnets`  | List of public subnet IDs  |
+| `private_subnets` | List of private subnet IDs |
+
+---
+
+## 🛠 Module Details
+
+* **Module Name:** `terraform-aws-vpc`
+* **License:** MIT
+* **CI/CD:** GitHub Actions
+* **IaC Platform:** [zafdrive.com](https://zafdrive.com)
+
+---
+
+## 🎯 Vision
+
+**Poland DevOps 2026**
+Production Infrastructure as Code, built for scale, security, and reliability.
