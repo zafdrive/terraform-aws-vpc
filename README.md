@@ -1,43 +1,33 @@
-╭──────────────────────────────────────────────────────────────╮
-│  🚀 TERRAFORM AWS VPC MODULE - PRODUCTION READY              │
-├──────────────────────────────────────────────────────────────┤
-│  Terraform  │  AWS  │  GitHub Actions  │  MIT License      │
-╰──────────────────────────────────────────────────────────────╯
+<div align="center">
 
-PRODUCTION VPC ARCHITECTURE (7 RESOURCES)
-═══════════════════════════════════════════════════════════════════════
+# 🚀 Terraform AWS VPC Module
 
-┌──────────────────────────────┐  ┌──────────────────────────────┐
-│        INTERNET (IGW)        │  │       NAT GATEWAY            │
-│                              │  │  $0.045/hr • Outbound Only   │
-│  ┌──────────────┐           │  │                              │
-│  │ PUBLIC (3 AZs)│           │  │  ┌──────────────┐           │
-│  │ ALB/Nginx     │           │  │  │ PRIVATE (3 AZs)│           │
-│  │ Bastion SSH   │ 10.0.101.x│  │  │ k3s Workers   │ 10.0.1.x │
-│  │              │◄───────────┘  │  │ FastAPI/DB    │◄──────────┘
-│  └──────────────┘           │  │  └──────────────┘           │
-└──────────────────────────────┘  └──────────────────────────────┘
+[![Terraform](https://img.shields.io/badge/terraform-623CE4?style=for-the-badge&logo=terraform&logoColor=white)](https://terraform.io)
+[![AWS](https://img.shields.io/badge/AWS-FF9900?style=for-the-badge&logo=amazon-aws&logoColor=black)](https://aws.amazon.com)
+[![CI](https://github.com/zafdrive/terraform-aws-vpc/actions/workflows/terraform.yml/badge.svg?branch=main)](https://github.com/zafdrive/terraform-aws-vpc/actions)
+[![MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=for-the-badge&logo=mit)](LICENSE)
 
-TERRAFORM OUTPUTS
-═══════════════════════════════════════════════════════════════════════
- vpc_id.........vpc-0abcdef1234567890
- public_subnets.[subnet-aaa, bbb, ccc]
-private_subnets.[subnet-111, 222, 333]
-nat_public_ip...3.123.45.67
+<br>
 
-PRODUCTION FEATURES
-═══════════════════════════════════════════════════════════════════════
-✅ Multi-AZ High Availability    ✅ Official HashiCorp Module 5.9.0
-✅ GitHub Actions CI/CD          ✅ AWS Provider Lock 5.100.0  
-✅ Production Resource Tagging   ✅ DNS Hostnames Enabled
+## Production AWS VPC Architecture
 
-REAL WORLD USAGE
-═══════════════════════════════════════════════════════════════════════
-k3s/EKS     → Private subnets (workers)
-FastAPI     → Public + ALB (load balancer)
-PostgreSQL  → Private (secure database)
-Nginx Proxy → Public (reverse proxy)
+| **Layer** | **AZs** | **Internet** | **Use Case** |
+|-----------|---------|--------------|--------------|
+| VPC | 1 | - | Core Network |
+| **Public** | 3 | ✅ IGW | ALB/Nginx |
+| **Private** | 3 | 🔒 NAT | k3s/App/DB |
 
-zafdrive.com IaC Platform
-Poland DevOps 2026 🚀
-═══════════════════════════════════════════════════════════════════════
+**Creates**: 7 resources | **Outputs**: vpc_id + subnets | **Cost**: $0.045/hr NAT
+
+## ✨ Production Features
+🔹 Multi-AZ HA (eu-central-1a/b/c)
+🔹 HashiCorp Official Module 5.9.0
+🔹 GitHub Actions CI/CD ✅
+🔹 Locked AWS Provider 5.100.0
+🔹 zafdrive.com IaC Platform
+
+text
+
+</div>
+
+**Poland DevOps 2026** | **[zafdrive.com](https://zafdrive.com)**
