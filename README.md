@@ -1,4 +1,3 @@
-<div align="center">
 
 # 🚀 Terraform AWS VPC Module
 
