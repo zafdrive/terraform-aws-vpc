@@ -1,37 +1,43 @@
-## 🎯 What is terraform-aws-vpc?
+╭──────────────────────────────────────────────────────────────╮
+│  🚀 TERRAFORM AWS VPC MODULE - PRODUCTION READY              │
+├──────────────────────────────────────────────────────────────┤
+│  Terraform  │  AWS  │  GitHub Actions  │  MIT License      │
+╰──────────────────────────────────────────────────────────────╯
 
-**Production-grade AWS VPC Terraform module** that creates a complete **Multi-AZ network architecture** ready for real applications.
+PRODUCTION VPC ARCHITECTURE (7 RESOURCES)
+═══════════════════════════════════════════════════════════════════════
 
-### 🏗 What This Module Creates
+┌──────────────────────────────┐  ┌──────────────────────────────┐
+│        INTERNET (IGW)        │  │       NAT GATEWAY            │
+│                              │  │  $0.045/hr • Outbound Only   │
+│  ┌──────────────┐           │  │                              │
+│  │ PUBLIC (3 AZs)│           │  │  ┌──────────────┐           │
+│  │ ALB/Nginx     │           │  │  │ PRIVATE (3 AZs)│           │
+│  │ Bastion SSH   │ 10.0.101.x│  │  │ k3s Workers   │ 10.0.1.x │
+│  │              │◄───────────┘  │  │ FastAPI/DB    │◄──────────┘
+│  └──────────────┘           │  │  └──────────────┘           │
+└──────────────────────────────┘  └──────────────────────────────┘
 
-**Complete VPC Infrastructure (7 Resources)**:
+TERRAFORM OUTPUTS
+═══════════════════════════════════════════════════════════════════════
+ vpc_id.........vpc-0abcdef1234567890
+ public_subnets.[subnet-aaa, bbb, ccc]
+private_subnets.[subnet-111, 222, 333]
+nat_public_ip...3.123.45.67
 
-| Layer | Components | AZs | CIDR | Internet Access |
-|-------|------------|-----|------|-----------------|
-| **Core** | VPC + Route Tables | 1 | `10.0.0.0/16` | N/A |
-| **Public** | 3 Subnets + IGW | a/b/c | `10.0.101.0/24`<br>`10.0.102.0/24`<br>`10.0.103.0/24` | ✅ **Direct** |
-| **Private** | 3 Subnets + NAT | a/b/c | `10.0.1.0/24`<br>`10.0.2.0/24`<br>`10.0.3.0/24` | 🔒 **Outbound Only** |
+PRODUCTION FEATURES
+═══════════════════════════════════════════════════════════════════════
+✅ Multi-AZ High Availability    ✅ Official HashiCorp Module 5.9.0
+✅ GitHub Actions CI/CD          ✅ AWS Provider Lock 5.100.0  
+✅ Production Resource Tagging   ✅ DNS Hostnames Enabled
 
-### 🌐 Production Network Architecture
+REAL WORLD USAGE
+═══════════════════════════════════════════════════════════════════════
+k3s/EKS     → Private subnets (workers)
+FastAPI     → Public + ALB (load balancer)
+PostgreSQL  → Private (secure database)
+Nginx Proxy → Public (reverse proxy)
 
-INTERNET (443/80)
-↓ Internet Gateway (IGW)
-┌──────────────────────┬──────────────────────┐
-│ PUBLIC SUBNETS │ PRIVATE SUBNETS │
-│ - ALB Load Balancer │ - k3s Worker Nodes │
-│ - Nginx Proxy │ - FastAPI Services │
-│ - Bastion SSH │ - PostgreSQL RDS │
-│ │ - Redis Cache │
-└──────────┬───────────┘ ↑ Outbound Only
-↓ NAT Gateway │ (yum/docker pull)
-
-### 📤 Terraform Outputs (Production Ready)
-
-| Output | Value Example | Used By |
-|--------|---------------|---------|
-| `vpc_id` | `vpc-0abcdef1234567890` | EKS, VPC Peering, Security Groups |
-| `public_subnets` | `["subnet-aaa","subnet-bbb","subnet-ccc"]` | ALB Target Groups, Bastion Hosts |
-| `private_subnets` | `["subnet-111","subnet-222","subnet-333"]` | k3s Node Groups, ECS Fargate, RDS |
-| `nat_public_ip` | `["3.123.45.67"]` | Firewall Whitelisting |
-
-### ✅ Production Features
+zafdrive.com IaC Platform
+Poland DevOps 2026 🚀
+═══════════════════════════════════════════════════════════════════════
