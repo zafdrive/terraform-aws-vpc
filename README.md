@@ -1,21 +1,23 @@
-# Terraform AWS VPC Module 🚀
+# 🚀 AWS VPC Module
 
-[![Terraform](https://img.shields.io/badge/terraform-%235835CC.svg?style=for-the-badge&logo=terraform&logoColor=white)](https://www.terraform.io/)
-[![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=black)](https://aws.amazon.com/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+[![Terraform](https://img.shields.io/badge/terraform-623CE4?style=for-the-badge&logo=terraform&logoColor=white)][terraform] [![AWS](https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white)][aws] [![CI](https://github.com/zafdrive/terraform-aws-vpc/actions/workflows/terraform.yml/badge.svg)][ci]
 
-Production-ready **AWS VPC** with **public/private subnets**, **NAT Gateway**. Perfect for **DevOps portfolios**.
+**Production VPC**: Multi-AZ Public/Private + NAT Gateway
 
-## 🚀 Quick Start
-```bash
-terraform init && terraform apply
+## 📋 Resources
 
+| Component | Count | Access |
+|-----------|-------|--------|
+| VPC | 1 | 10.0.0.0/16 |
+| Public Subnets | 3 | IGW |
+| Private Subnets | 3 | NAT |
+| NAT Gateway | 1 | Outbound |
 
-### 10. LICENSE (MIT)
-```bash
-cat > LICENSE << 'EOF'
-MIT License
+## 📤 Outputs
+| Name | Example |
+|------|---------|
+| vpc_id | vpc-0abc123 |
+| public_subnets | subnet-aaa,bbb |
+| private_subnets | subnet-111,222 |
 
-Copyright (c) 2026 zafdrive.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy...
+**zafdrive.com** | **DevOps Poland 2026**
